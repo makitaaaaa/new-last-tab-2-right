@@ -22,21 +22,24 @@
    * @param {browser.tabs.Tab} tab 
    */
   const onTabCreated = (tab) => {
-    moveTabRight(tab, activeTabId, activeWindowId);
+    if (activeWindowId !== tab.windowId) {
+      return;
+    }
+    if (tab.active) {
+      slideRightIndex = 0;
+    }
+    slideRightIndex++;
+    moveTabRight(tab, activeTabId, activeWindowId, slideRightIndex);
   }
 
   /**
    * @param {browser.tabs.Tab} tab 
    * @param {number} workActiveTabId 
    * @param {number} workWindowTabId 
+   * @param {number} workSlideRightIndex 
    */
-  const moveTabRight = async (tab, workActiveTabId, workWindowTabId) => {
+  const moveTabRight = async (tab, workActiveTabId, workWindowTabId, workSlideRightIndex) => {
     try {
-      if (workWindowTabId !== tab.windowId) {
-        return;
-      }
-      slideRightIndex++;
-      let slideRightIndexWork = slideRightIndex;
       if (!await isLastTab(tab)) {
         // not last tab
         return;
@@ -46,7 +49,7 @@
       if (targetTab.pinned === true) {
         targetTab = await getLastPinnedTab();
       }
-      let taregetMoveIndex = targetTab.index + slideRightIndexWork;
+      let taregetMoveIndex = targetTab.index + workSlideRightIndex;
       if (tab.index === taregetMoveIndex) {
         return;
       }
