@@ -38,12 +38,7 @@
       }
       slideRightIndex++;
       let slideRightIndexWork = slideRightIndex;
-      /** @type {browser.tabs.Tab} */
-      let nextToTabs = await browser.tabs.query({
-        currentWindow: true,
-        index: tab.index + 1
-      });
-      if (nextToTabs.length > 0) {
+      if (!await isLastTab(tab)) {
         // not last tab
         return null;
       }
@@ -119,6 +114,23 @@
       return null;
     }
     return tabs[tabs.length - 1];
+  }
+
+  /**
+   * @param {browser.tabs.Tab} tab 
+   * @return {boolean}
+   */
+  const isLastTab = async (tab) => {
+    let nextToTabs = await browser.tabs.query({
+      currentWindow: true,
+      index: tab.index + 1
+    });
+    for (let nextToTab of nextToTabs) {
+      if (tab.lastAccessed > nextToTab.lastAccessed) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
