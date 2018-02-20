@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "New last tab 2 Right",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "If the new tab was placed at the last position, move the tab to the current right position.",
   "author": "makitaaaaa",
   "applications": {
