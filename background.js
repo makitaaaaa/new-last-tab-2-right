@@ -2,8 +2,6 @@
 
 /** @type {number} */
 let slideRightIndex = 0;
-/** @type {string} */
-let lastActiveTabUrl = null;
 /** @type {number} */
 let activeTabId = null;
 /** @type {number} */
@@ -48,19 +46,9 @@ const moveTabRight = async (tab, workActiveTabId, workWindowTabId) => {
       return null;
     }
     let targetTab = await browser.tabs.get(workActiveTabId);
-    if (lastActiveTabUrl !== targetTab.url) {
-      // reset
-      slideRightIndexWork = 1;
-      slideRightIndex = 1;
-    }
-    lastActiveTabUrl = targetTab.url;
-    let lastPinnedTab = null;
     let currentTab = targetTab;
     if (targetTab.pinned === true) {
-      lastPinnedTab = await getLastPinnedTab();
-      targetTab = lastPinnedTab;
-    } else {
-      targetTab = await browser.tabs.get(targetTab.id);
+      targetTab = await getLastPinnedTab();
     }
     let taregetMoveIndex = targetTab.index + slideRightIndexWork;
     if (tab.index === taregetMoveIndex) {
