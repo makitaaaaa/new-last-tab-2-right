@@ -23,7 +23,6 @@
    */
   const onTabCreated = (tab) => {
     moveTabRight(tab, activeTabId, activeWindowId);
-    return null;
   }
 
   /**
@@ -34,13 +33,13 @@
   const moveTabRight = async (tab, workActiveTabId, workWindowTabId) => {
     try {
       if (workWindowTabId !== tab.windowId) {
-        return null;
+        return;
       }
       slideRightIndex++;
       let slideRightIndexWork = slideRightIndex;
       if (!await isLastTab(tab)) {
         // not last tab
-        return null;
+        return;
       }
       let targetTab = await browser.tabs.get(workActiveTabId);
       let currentTab = targetTab;
@@ -49,7 +48,7 @@
       }
       let taregetMoveIndex = targetTab.index + slideRightIndexWork;
       if (tab.index === taregetMoveIndex) {
-        return null;
+        return;
       }
       // move tab
       await browser.tabs.move(tab.id, {
@@ -66,12 +65,9 @@
           });
         }
       }
-      return null;
     } catch (e) {
       logging(e);
     }
-    return null;
-
   }
 
   /**
@@ -155,7 +151,6 @@
     browser.tabs.onCreated.addListener(onTabCreated);
     browser.tabs.onRemoved.addListener(onTabRemoved);
     browser.windows.onFocusChanged.addListener(onWindowsFocusChanged)
-    return null;
   }
 
   initialize();
